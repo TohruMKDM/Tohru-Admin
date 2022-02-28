@@ -10,7 +10,7 @@
 
 
 local unpack = table.unpack or unpack
-local infl = loadstring(game:HttpGet(), '@inflate.lua')()
+local infl = loadstring(game:HttpGet('https://raw.githubusercontent.com/TohruMKDM/Tohru-Admin/master/unzip/inflate.lua'), '@inflate.lua')()
 local zzlib = {}
 
 local function arraytostr(array)
