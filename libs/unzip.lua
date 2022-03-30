@@ -180,9 +180,9 @@ local dynamic = function(output, stream)
 end
 
 local newStream = function(data)
-    local start = find(data, '\x50\x4b\x05\x06')
+    local start = find(data, 'PK\5\6')
     if start then
-        data = sub(data, 1, start + 19)..'\x00\x00'
+        data = sub(data, 1, start + 19)..'\0\0'
     end
     return {buffer = data}
 end
@@ -246,6 +246,7 @@ local getFiles = function(stream, unzip)
     end
     return iterate(data)
 end
+
 return {
     newStream = newStream,
     inflate = inflate,
