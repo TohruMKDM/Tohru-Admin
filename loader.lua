@@ -6,15 +6,14 @@ if isfile('TohruAdmin/libs/import.lua') then
     return import('init')
 end
 
-local url = 'https://github.com/TohruMKDM/Tohru-Admin/archive/refs/heads/master.zip'
-local sub = string.sub
+local sub, match = string.sub, string.match
 local unzip = loadstring(game:HttpGet('https://raw.githubusercontent.com/TohruMKDM/Tohru-Admin/master/libs/unzip.lua'), '@unzip.lua')()
-local stream = unzip.newStream(game:HttpGet(url))
+local stream = unzip.newStream(game:HttpGet('https://github.com/TohruMKDM/Tohru-Admin/archive/refs/heads/master.zip'))
 
 for name, content in unzip.getFiles(stream, true) do
     if sub(name, -1) == '/' then
         makefolder(name)
-    else
+    elseif match(name, '%.[^/\\%.]+$') then
         writefile(name, content)
     end
 end

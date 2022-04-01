@@ -37,25 +37,16 @@ local parseFolder = function(folder, path)
     end
 end
 
-mt.init = function(self, directory, name)
-    return setmetatable({
-        path = makePath(directory, name or 'import.lua'),
-        dir = directory
-    }, self)
-end
-
-mt.resolve = function(self, path)
-    local module = module or self
-    local current = module.dir
-    local file, directory, absolutePath = parseFolder(makePath(current, 'libs'), path)
+local resolver = function(dir, path)
+    local file, directory, absolutePath = parseFolder(makePath(dir, 'libs'), path)
     if file then
         return file, directory, absolutePath
     end
-    file, directory, absolutePath = parseFolder(current, path)
+    file, directory, absolutePath = parseFolder(dir, path)
     if file then
         return file, directory, absolutePath
     end
-    path = makePath(current, path)
+    path = makePath(dir, path)
     local split = splitPath(path)
     local name = split[#split]
     split[#split] = nil
@@ -67,6 +58,22 @@ mt.resolve = function(self, path)
     end
 end
 
+mt.init = function(self, directory, name, root)
+    return setmetatable({
+        path = makePath(directory, name or 'import.lua'),
+        dir = directory,
+        root = root
+    }, self)
+end
+
+mt.resolve = function(self, path)
+    local name, directory, absolutePath = resolver(self.dir, path)
+    if name then
+        return name, directory, absolutePath
+    end
+    return resolver(self.root, path)
+end
+
 mt.import = function(self, path, force)
     local module = module or self
     assert(path ~= nil, 'Missing name to require')
@@ -74,9 +81,11 @@ mt.import = function(self, path, force)
     if not force and importCache[absolutePath] then
         return importCache[absolutePath]
     end
-    assert(name, 'No such module "'..path..'" in "'..module.path..'"')
+    if not name then
+        error('No such module "'..path..'" in "'..module.path..'"')
+    end
     local fn = assert(loadstring(readfile(absolutePath), '@'..name))
-    local mod = mt:init(directory, name)
+    local mod = mt:init(directory, name, module.root)
     local environment = {
         module = mod,
         import = function(...)
@@ -90,7 +99,7 @@ mt.import = function(self, path, force)
 end
 
 return function(directory, name)
-    local mod = mt:init(directory, name)
+    local mod = mt:init(directory, name, directory)
     return function(...)
         return mod:import(...)
     end, mod

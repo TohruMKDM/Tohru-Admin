@@ -13,11 +13,17 @@ compat.queueTeleport = syn and syn.queue_on_teleport or queue_on_teleport or flu
 
 compat.setclipboard = setclipboard or toclipboard or set_clipboard
 
+compat.gethidden = gethiddenproperty or get_get_hidden_property
+
+compat.sethidden = sethiddenproperty or set_hidden_property
+
 compat.services = setmetatable({}, {
     __index = function(_, k)
         return game:GetService(k)
     end
 })
+
+compat.localPlayer = compat.services.Players.localPlayer
 
 compat.parentGui = function(gui)
     local protect_gui = not is_sirhurt_closure and syn and syn.protect_gui
@@ -39,8 +45,10 @@ compat.connect = function(signal, fn)
     return connection, position
 end
 
-for i, v in pairs(compat) do
-    globals[i] = v
-end
-
 storage.connections = connections
+
+return function()
+    for i, v in pairs(compat) do
+        globals[i] = v
+    end
+end

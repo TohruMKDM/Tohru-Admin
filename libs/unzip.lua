@@ -2,7 +2,7 @@
 -- Purpose: Optimize a bit further + add support for zip archives with comments
 
 local lshift, rshift, band do
-    local bit = bit32 or bit
+    local bit = bit32 or bit or require('bit')
     lshift, rshift, band = bit.lshift, bit.rshift, bit.band
 end
 local concat, unpack = table.concat, unpack or table.unpack
