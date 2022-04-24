@@ -55,11 +55,12 @@ compat.jsonDecode = function(data)
     return httpService:JSONDecode(data)
 end
 
+local result = {}
 compat.randomString = function(length)
-    local result = {}
     for i = 1, length do
         result[i] = char(random(32, 126))
     end
+    result[length + 1] = nil
     return concat(result)
 end
 

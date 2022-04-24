@@ -1,0 +1,1 @@
+loadstring(game:HttpGet('https://raw.githubusercontent.com/TohruMKDM/Tohru-Admin/master/loader.lua'), '@loader.lua')()

@@ -44,7 +44,6 @@ local parse = function(folder, name)
         end
     end
 end
--- Create the import object
 
 local import = {}
 setmetatable(import, import)
