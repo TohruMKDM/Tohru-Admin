@@ -67,7 +67,7 @@ launchScript = function()
         end)
     end
     if isfile('TohruAdmin/libs/import.lua') then
-        local data = readfile('TohruAdmin/libs/impot.lua')
+        local data = readfile('TohruAdmin/libs/import.lua')
         local getter, err = loadstring(data, '@import.lua')
         if not getter then
             log('error', 'Error loading import.lua; %s', err)
