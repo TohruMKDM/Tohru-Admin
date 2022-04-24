@@ -56,7 +56,6 @@ local downloadScript = function()
     end
 end
 
-
 local launchScript
 launchScript = function()
     if import then

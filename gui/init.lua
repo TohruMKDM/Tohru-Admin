@@ -17,7 +17,7 @@ local userInputService = game:GetService('UserInputService')
 
 local newUdim2 = UDim2.new
 local commandBar, main = gui.CommandBar, gui.MainDragFrame.Main
-local title, uiPages = main.Title, main.Pages
+local title, menu, pages = main.Title, main.menu, main.Pages
 local config = storage.config
 local defer = task.defer
 local barGoal = {}
@@ -72,3 +72,48 @@ connect(title.Close.MouseButton1Click, function()
         mainDebounce = false
     end
 end)
+
+do
+    local pageLayout = pages.UIPageLayout
+    local imageGoal, textGoal = {}, {}
+    local lastPage
+    local tweenPage = function(page, transparency)
+        page = menu[Page.Name]
+        imageGoal.ImageTransparency = transparency
+        textGoal.TextTransparency = transparency
+        utils.tween(page.Image, 'Sine', 'Out', 0.25, imageGoal)
+        utils.tween(page.PageName, 'Sine', 'Out', 0.25, textGoal)
+    end
+    for _, v in ipairs(menu:GetChildren()) do
+        if v.ClassName ~= 'UIListLayout' then
+            connect(v.MouseButton1Click, function()
+                local page = pages[v.Name]
+                lastPage = pageLayout.CurrentPage
+                pageLayout:JumpTo(page)
+                if menu:FindFirstChild(lastPage.Name) then
+                    tweenPage(lastPage, 0.5)
+                end
+                tweenPage(page, 0)
+            end)
+            connect(v.MouseEnter, function()
+                local page = pages[v.Name]
+                if lastPage ~= page then
+                    tweenPage(page, 0.4)
+                end
+            end)
+            connect(v.MouseLeave, function()
+                local page = pages[v.name]
+                if lastPage ~= page then
+                    tweenPage(page, 0.4)
+                end
+            end)
+        end
+    end
+    connect(title.TitleButton.MouseButton1Click, function()
+        lastPage = pageLayout.CurrentPage
+        if menu:FindFirstChild(lastPage.Name) then
+            tweenPage(lastPage, 0.5)
+        end
+        pageLayout:JumpTo(pages.Menu)
+    end)
+end
