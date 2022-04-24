@@ -10,7 +10,6 @@ local sub, find, format, upper = string.sub, string.find, string.format, string.
 local date = os.date
 
 local notify = function(title, message, button, callback)
-    local starterGui = game:GetService('StarterGui')
     local config = {
         Title = title,
         Text = message
@@ -21,7 +20,7 @@ local notify = function(title, message, button, callback)
         config.Callback = bindable
         config.Button1 = button
     end
-    starterGui:SetCore('SendNotifcation', config)
+    starterGui:SetCore('SendNotification', config)
 end
 
 local log = function(tag, message, ...)
@@ -29,10 +28,10 @@ local log = function(tag, message, ...)
     tag = upper(tag)
     if isfolder('TohruAdmin') then
         local write = isfile('TohruAdmin/debug.log') and appendfile or writefile
-        write('TohruAdmin/debug.log', format('\n%s | %s | %s', date('%F %T'), tag, message))
+        write('TohruAdmin/debug.log', format('\n%s | %s | %s', date('%x - %X'), tag, message))
     else
         makefolder('TohruAdmin')
-        writefile('TohruAdmin/debug.log', format('\n%s | [%s] | %s', date('%F %T'), tag, message))
+        writefile('TohruAdmin/debug.log', format('\n%s | [%s] | %s', date('%x - %X'), tag, message))
     end
 end
 
@@ -81,9 +80,9 @@ launchScript = function()
         getgenv().import = import
         local success, fail = pcall(import, 'init')
         if not success then
+            getgenv().import = nil
             log('error', 'Error initializing tohru admin; %s', fail)
             notify('Tohru Admin', 'Unable to initialize tohru admin\nError logged at "TohruAdmin/debug.log"', 'Retry?', function()
-                getgenv().import = nil
                 launchScript()
             end)
         end

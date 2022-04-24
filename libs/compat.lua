@@ -55,7 +55,7 @@ compat.jsonDecode = function(data)
     return httpService:JSONDecode(data)
 end
 
-local result = {}
+local result = setmetatable({}, {__mode = 'k'})
 compat.randomString = function(length)
     for i = 1, length do
         result[i] = char(random(32, 126))

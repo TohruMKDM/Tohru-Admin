@@ -4,4 +4,5 @@
     Author: Tohru
 ]]
 
+import('compat')()
 import('gui')
