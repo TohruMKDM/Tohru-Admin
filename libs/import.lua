@@ -1,16 +1,17 @@
--- Basically just require but for support for the local file system
--- + Support for relative files
+--[[
+    Name: import.lua
+    Description: A custom require system with support for relative paths, inspired from luvit.
+    Author: Tohru
+]]
 
-local gmatch, gsub, match = string.gmatch, string.gsub, string.match
-local concat = table.concat
-local importCache = {}
+local gmatch, gsub = string.gmatch, string.gsub
+local format, find = string.format, string.find
+local concat, remove = table.concat, table.remove
 
-local mt = {}
-mt.__index = mt
-
-local makePath = function(...)
-    return concat({...}, '/')
-end
+local environment = {
+    __index = getfenv(1)
+}
+local cache = {}
 
 local splitPath = function(path)
     local result = {}
@@ -20,87 +21,99 @@ local splitPath = function(path)
     return result
 end
 
-local parseFolder = function(folder, path)
-    if isfolder(folder) then
-        for _, file in pairs(listfiles(folder)) do
-            local split = splitPath(file)
-            local name = split[#split]
-            split[#split] = nil
-            if path == gsub(name, '%.[^/\\%.]+$', '') then
-                if match(name, '%.[^/\\%.]+$') == '.lua' then
-                    return name, concat(split, '/'), file
-                elseif isfolder(file) and isfile(makePath(file, 'init.lua')) then
-                    return 'init.lua', file, makePath(file, 'init.lua')
-                end
-            end
+local getLast = function(path)
+    local last
+    for split in gmatch(path, '[^/\\]+') do
+        last = split
+    end
+    return last
+end
+
+local parse = function(folder, name)
+    if not isfolder(folder) then
+        return
+    end
+    for _, v in ipairs(listfiles(folder)) do
+        local file = getLast(v)
+        if file == name..'.lua' then
+            return v
+        end
+        local path = v..'/init.lua'
+        if file == name and isfile(path) then
+            return path
         end
     end
 end
+-- Create the import object
 
-local resolver = function(dir, path)
-    local file, directory, absolutePath = parseFolder(makePath(dir, 'libs'), path)
-    if file then
-        return file, directory, absolutePath
+local import = {}
+setmetatable(import, import)
+import.__index = import
+
+import.__call = function(self, name, force)
+    local path = self:resolve(name)
+    if path then
+        if find(path, '\\', 1, true) then
+            path = gsub(path, '\\', '/')
+        end
     end
-    file, directory, absolutePath = parseFolder(dir, path)
-    if file then
-        return file, directory, absolutePath
+    if not force and cache[path] then
+        return cache[path]
     end
-    path = makePath(dir, path)
+    if not path then
+        error(format('No such module "%s" in "%s"', name, self.dir), 2)
+    end
+    local module = assert(loadstring(readfile(path), '@'..path))
+    setfenv(module, setmetatable({
+        import = import:init(path)
+    }, environment))
+    local result = module()
+    cache[path] = result or {}
+    return result
+end
+
+import.resolve = function(self, name)
+    local path = parse(self.dir..'/libs', name)
+    if path then
+        return path
+    end
+    local split = splitPath(name)
+    local searchName = remove(split)
+    path = parse(self.dir..'/'..concat(split, '/'), searchName)
+    if path then
+        return path
+    end
+    path = parse(self.dir, name)
+    if path then
+        return path
+    end
+    if self.dir == self.root then
+        return
+    end
+    path = parse(self.root..'/libs', name)
+    if path then
+        return path
+    end
+    split = splitPath(name)
+    searchName = remove(split)
+    path = parse(self.root..'/'..concat(split, '/'), searchName)
+    if path then
+        return path
+    end
+    path = parse(self.root, name)
+    if path then
+        return path
+    end
+end
+
+import.init = function(self, path)
     local split = splitPath(path)
-    local name = split[#split]
-    split[#split] = nil
-    if isfolder(path) and isfile(makePath(path, 'init.lua')) then
-        return 'init.lua', concat(split, '/'), makePath(path, 'init.lua')
-    end
-    if isfile(path..'.lua') then
-        return name, concat(split, '/'), path..'.lua'
-    end
-end
-
-mt.init = function(self, directory, name, root)
-    return setmetatable({
-        path = makePath(directory, name or 'import.lua'),
-        dir = directory,
-        root = root
-    }, self)
-end
-
-mt.resolve = function(self, path)
-    local name, directory, absolutePath = resolver(self.dir, path)
-    if name then
-        return name, directory, absolutePath
-    end
-    return resolver(self.root, path)
-end
-
-mt.import = function(self, path, force)
-    local module = module or self
-    assert(path ~= nil, 'Missing name to require')
-    local name, directory, absolutePath = self:resolve(path)
-    if not force and importCache[absolutePath] then
-        return importCache[absolutePath]
-    end
-    if not name then
-        error('No such module "'..path..'" in "'..module.path..'"')
-    end
-    local fn = assert(loadstring(readfile(absolutePath), '@'..name))
-    local mod = mt:init(directory, name, module.root)
-    local environment = {
-        module = mod,
-        import = function(...)
-            return mod:import(...)
-        end
+    local instance = {
+        root = split[1],
+        dir = concat(split, '/', 1, #split - 1),
+        path = path
     }
-    setfenv(fn, setmetatable(environment, {__index = getgenv()}))
-    mod.export = fn()
-    importCache[absolutePath] = mod.export
-    return mod.export
+    return setmetatable(instance, self)
 end
 
-return function(directory, name)
-    local mod = mt:init(directory, name, directory)
-    return function(...)
-        return mod:import(...)
-    end, mod
-end
+return import

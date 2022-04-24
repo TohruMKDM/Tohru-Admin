@@ -2,53 +2,72 @@
 
 local storage = import('storage')
 
-local globals = getgenv()
-local connections = {}
+local players = game:GetService('Players')
+local httpService = game:GetService('HttpService')
+
+local concat, remove = table.concat, table.remove
+local char = string.char
+local random = math.random
 
 local compat = {}
 
 compat.request = syn and syn.request or http and http.request or http_request or fluxus and fluxus.request or request
 
+compat.protectGui = not is_sirhurt_closure and syn and syn.protect_gui
+
+compat.gethui = get_hidden_gui or gethui
+
 compat.queueTeleport = syn and syn.queue_on_teleport or queue_on_teleport or fluxus and fluxus.queue_on_teleport
 
 compat.setclipboard = setclipboard or toclipboard or set_clipboard
 
-compat.gethidden = gethiddenproperty or get_get_hidden_property
+compat.gethidden = gethiddenproperty or get_hidden_property
 
 compat.sethidden = sethiddenproperty or set_hidden_property
 
-compat.services = setmetatable({}, {
-    __index = function(_, k)
-        return game:GetService(k)
-    end
-})
+compat.localPlayer = players.LocalPlayer
 
-compat.localPlayer = compat.services.Players.localPlayer
+compat.mouse = compat.localPlayer:GetMouse()
 
-compat.parentGui = function(gui)
-    local protect_gui = not is_sirhurt_closure and syn and syn.protect_gui
-    local hiddenUI = get_hidden_gui or gethui
-    if protect_gui then
-        protect_gui(gui)
-    elseif hiddenUI then
-        gui.Parent = hiddenUI()
-        return
-    end
-    gui.Parent = game:GetService('CoreGui')
-    return gui
-end
-
+local connections = {}
 compat.connect = function(signal, fn)
     local connection = signal:Connect(fn)
-    local position = #connections + 1
-    connections[position] = connection
-    return connection, position
+    connections[#connections + 1] = connection
+    return connection
 end
-
 storage.connections = connections
 
-return function()
-    for i, v in pairs(compat) do
-        globals[i] = v
+compat.removeConnection = function(connection)
+    for i, v in ipairs(connections) do
+        if v == connection then
+            connection:Disconnect()
+            remove(connections, i)
+            return
+        end
     end
 end
+
+compat.jsonEncode = function(data)
+    return httpService:JSONEncode(data)
+end
+
+compat.jsonDecode = function(data)
+    return httpService:JSONDecode(data)
+end
+
+compat.randomString = function(length)
+    local result = {}
+    for i = 1, length do
+        result[i] = char(random(32, 126))
+    end
+    return concat(result)
+end
+
+return setmetatable(compat, {
+    __call = function()
+        local global = getgenv()
+        for i, v in pairs(compat) do
+            global[i] = v
+        end
+    end
+})

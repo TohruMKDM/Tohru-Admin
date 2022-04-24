@@ -1,8 +1,11 @@
--- "Rewrite" + patch of https://github.com/zerkman/zzlib
--- Purpose: Optimize a bit further + add support for zip archives with comments
+--[[
+    Name: unzip.lua
+    Description: Rewrite of https://github.com/zerkman/zzlib to favor performance and for LuaU support.
+    Author: Tohru
+]]
 
 local lshift, rshift, band do
-    local bit = bit32 or bit or require('bit')
+    local bit = bit32 or bit
     lshift, rshift, band = bit.lshift, bit.rshift, bit.band
 end
 local concat, unpack = table.concat, unpack or table.unpack
