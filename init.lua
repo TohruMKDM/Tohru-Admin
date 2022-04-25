@@ -9,6 +9,8 @@ local storage = import('storage')
 local defaultSettings = import('settings')
 local loadFailed = false
 
+compat()
+
 if isfile(import.root..'/settings.json') then
     local success, save = pcall(jsonDecode, readfile(import.root..'/save.json'))
     local settings = {}

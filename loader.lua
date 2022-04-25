@@ -107,6 +107,7 @@ launchScript = function()
         end
     else
         downloadScript()
+        launchScript()
     end
 end
 
