@@ -89,6 +89,11 @@ local launchScript
 launchScript = function()
     if import then
         notify('Tohru Admin', 'Tohru admin is already running', 'Restart?', 'Reload?', function(response)
+            local storage = import('storage')
+            for _, v in ipairs(storage.connections) do
+                v:Disconnect()
+            end
+            storage.gui:Destroy()
             getgenv().import = nil
             if response == 'Restart?' then
                 launchScript()
