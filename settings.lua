@@ -4,6 +4,8 @@ return {
     joinLogs = false,
     cmdLogs = false,
     persist = false,
+    uiOpen = false,
+    debug = false,
     staff = {},
     binds = {},
     spawns = {},

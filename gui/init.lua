@@ -30,7 +30,6 @@ local wrap = coroutine.wrap
 local barGoal = {}
 local barOpen = false
 
-local commandBarClone = commandBar:Clone()
 gui.Notification.Visible = false
 commandBar.Visible = false
 main.Visible = false
@@ -54,7 +53,7 @@ connect(userInputService.InputBegan, function(input, gpe)
     if input.KeyCode == keyCode[settings.prefix] then
         barOpen = not barOpen
         local transparencyTween = barOpen and helpers.tweenAllTransparentToObject or helpers.tweenAllTransparent
-        transparencyTween(commandBar, 0.5, commandBarClone)
+        transparencyTween(commandBar, 0.5)
         if barOpen then
             commandBar.Visible = true
             barGoal.Position = #utils.getTools(localPlayer) == 0 and newUdim2(0.5, -100, 1, -45) or newUdim2(0.5, -100, 1, -110)
