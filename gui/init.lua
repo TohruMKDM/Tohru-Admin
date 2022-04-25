@@ -24,9 +24,10 @@ local size420 = Enum.ThumbnailSize.Size420x420
 local commandBar, main = gui.CommandBar, gui.MainDragFrame.Main
 local title, menu, pages = main.Title, main.Menu, main.Pages
 local settings = storage.settings
-local defer, tWait = task.defer, task.wait
+local defer = task.defer
 local match, format = string.match, string.format
 local wrap = coroutine.wrap
+local floor = math.floor
 local barGoal = {}
 local barOpen = false
 
@@ -88,7 +89,6 @@ end)
 do
     local pageLayout = pages.UIPageLayout
     local imageGoal, textGoal = {}, {}
-    local lastPage
     local tweenPage = function(page, transparency)
         page = menu[page.Name]
         imageGoal.ImageTransparency = transparency
@@ -100,31 +100,31 @@ do
         if v.ClassName ~= 'UIListLayout' then
             connect(v.MouseButton1Click, function()
                 local page = pages[v.Name]
-                lastPage = pageLayout.CurrentPage
+                local currentPage = pageLayout.CurrentPage
                 pageLayout:JumpTo(page)
-                if menu:FindFirstChild(lastPage.Name) then
-                    tweenPage(lastPage, 0.5)
+                if menu:FindFirstChild(currentPage.Name) then
+                    tweenPage(currentPage, 0.5)
                 end
                 tweenPage(page, 0)
             end)
             connect(v.MouseEnter, function()
                 local page = pages[v.Name]
-                if lastPage ~= page then
+                if pageLayout.CurrentPage ~= page then
                     tweenPage(page, 0.4)
                 end
             end)
             connect(v.MouseLeave, function()
                 local page = pages[v.name]
-                if lastPage ~= page then
+                if pageLayout.CurrentPage ~= page then
                     tweenPage(page, 0.4)
                 end
             end)
         end
     end
     connect(title.TitleButton.MouseButton1Click, function()
-        lastPage = pageLayout.CurrentPage
-        if menu:FindFirstChild(lastPage.Name) then
-            tweenPage(lastPage, 0.5)
+        local currentPage = pageLayout.CurrentPage
+        if menu:FindFirstChild(currentPage.Name) then
+            tweenPage(currentPage, 0.5)
         end
         pageLayout:JumpTo(pages.Menu)
     end)
@@ -247,10 +247,11 @@ do
     serverPlayers.PlayersFrame.Players.Text = format('%s/%s', colorize(count), colorize(players.MaxPlayers))
     serverGame.Thumbnail.Image = 'https://www.roblox.com/asset-thumbnail/image?assetId='..game.PlaceId..'&width=768&height=432&format=png'
     serverGame.Id.Text = game.PlaceId
+    helpers.onClick(serverGame.Id, 'TextColor3')
     local connection = connect(runService.RenderStepped, function()
         local mins = workSpace.DistributedGameTime / 60
         local hrs = mins / 60
-        serverAge.ClientAgeFrame.ClientAge.Text = format('%s hrs, %s mins', colorize(hrs), colorize(mins))
+        serverAge.ClientAgeFrame.ClientAge.Text = format('%s hrs, %s mins', colorize(floor(hrs)), colorize(floor(mins)))
     end)
     connect(serverAge.AncestryChanged, function()
         if not serverAge.Parent then
@@ -259,7 +260,7 @@ do
     end)
     connect(serverGame.Id.MouseButton1Click, function()
         if setClipboard then
-            setClipboard(id)
+            setClipboard(game.PlaceId)
             ui.notify('Copied the current GameID to your clipboard')
         else
             ui.notify('Incompatible exploit', 'Your exploit does not support copying content to your clipboard')
