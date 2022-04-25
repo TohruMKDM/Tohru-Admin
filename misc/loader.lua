@@ -10,6 +10,11 @@ local sub, find, format, upper = string.sub, string.find, string.format, string.
 local date = os.date
 local traceback = debug.traceback
 
+local blacklist = {
+    ['/misc/'] = true,
+    ['libs/unzip.lua'] = true
+}
+
 local notify = function(title, message, button, button2, callback)
     local config = {
         Title = title,
@@ -69,10 +74,12 @@ local downloadScript = function()
     local inflate = unzip.inflate
     for name, offset in unzip.getFiles(stream) do
         name = 'TohruAdmin'..sub(name, select(2, find(name, '%a/')))
-        if sub(name, -1) == '/' then
-            makefolder(name)
-        elseif sub(name, -4) == '.lua' then
-            writefile(name, inflate(stream, offset))
+        if not blacklist[name] then
+            if sub(name, -1) == '/' then
+                makefolder(name)
+            elseif sub(name, -4) == '.lua' then
+                writefile(name, inflate(stream, offset))
+            end
         end
     end
 end
