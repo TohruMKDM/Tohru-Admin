@@ -123,7 +123,7 @@ launchScript = function()
             end)
         else
             local package = import('package')
-            notify('Tohru Admin', 'Tohru Admin '..package.version..' initialized successfully')
+            notify('Tohru Admin', 'Tohru Admin v'..package.version..' initialized successfully')
         end
     else
         downloadScript()
