@@ -10,7 +10,7 @@ local sub, find, format, upper = string.sub, string.find, string.format, string.
 local date = os.date
 local traceback = debug.traceback
 
-local notify = function(title, message, button, callback)
+local notify = function(title, message, button, button2, callback)
     local config = {
         Title = title,
         Text = message
@@ -20,6 +20,7 @@ local notify = function(title, message, button, callback)
         bindable.OnInvoke = callback
         config.Callback = bindable
         config.Button1 = button
+        config.Button2 = button2
     end
     starterGui:SetCore('SendNotification', config)
 end
@@ -79,9 +80,14 @@ end
 local launchScript
 launchScript = function()
     if import then
-        notify('Tohru Admin', 'Tohru admin is already running', 'Restart?', function()
+        notify('Tohru Admin', 'Tohru admin is already running', 'Restart?', 'Reload?', function(response)
             getgenv().import = nil
-            launchScript()
+            if response == 'Restart?' then
+                launchScript()
+            else
+                downloadScript()
+                launchScript()
+            end
         end)
         return
     end
@@ -103,7 +109,7 @@ launchScript = function()
             pcall(cleanUp)
             getgenv().import = nil
             log('error', 'Error initializing tohru admin; %s', traceback(fail, 4))
-            notify('Tohru Admin', 'Unable to initialize tohru admin\nError logged at "TohruAdmin/debug.log"', 'Retry?', function()
+            notify('Tohru Admin', 'Unable to initialize tohru admin\nError logged at "TohruAdmin/debug.log"', 'Retry?', nil, function()
                 launchScript()
             end)
         end
