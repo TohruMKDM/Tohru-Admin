@@ -110,7 +110,7 @@ do
             connect(v.MouseEnter, function()
                 local page = pages[v.Name]
                 if pageLayout.CurrentPage ~= page then
-                    tweenPage(page, 0.4)
+                    tweenPage(page, 0.3)
                 end
             end)
             connect(v.MouseLeave, function()
@@ -252,7 +252,7 @@ do
         local secs = workSpace.DistributedGameTime
         local mins = secs / 60
         local hrs = mins / 60
-        serverAge.ClientAgeFrame.ClientAge.Text = format('%s hrs, %s mins, %s secs', colorize(floor(hrs)), colorize(floor(mins)), colorize(secs % 60))
+        serverAge.ClientAgeFrame.ClientAge.Text = format('%s hrs, %s mins, %s secs', colorize(floor(hrs)), colorize(floor(mins)), colorize(floor(secs % 60)))
     end)
     connect(serverAge.AncestryChanged, function()
         if not serverAge.Parent then
