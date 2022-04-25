@@ -14,15 +14,17 @@ local ui = import('ui')
 local marketPlace = game:GetService('MarketplaceService')
 local players = game:GetService('players')
 local userInputService = game:GetService('UserInputService')
+local workSpace = game:GetService('Workspace')
 
 local newUdim2 = UDim2.new
 local fromOffset, fromRGB = UDim2.fromOffset, Color3.fromRGB
 local thumbnail, headShot = Enum.ThumbnailType.AvatarThumbnail,Enum.ThumbnailType.HeadShot
 local size420 = Enum.ThumbnailSize.Size420x420
+local keyCode = Enum.KeyCode
 local commandBar, main = gui.CommandBar, gui.MainDragFrame.Main
 local title, menu, pages = main.Title, main.Menu, main.Pages
-local config = storage.config
-local defer = task.defer
+local settings = storage.settings
+local defer, tWait = task.defer, task.wait
 local match, format = string.match, string.format
 local wrap = coroutine.wrap
 local barGoal = {}
@@ -37,7 +39,7 @@ helpers.setAllTransparent(commandBar)
 helpers.dragGui(main)
 
 local colorize = function(message)
-    local textColor = config.textColor
+    local textColor = settings.textColor
     return format('<font color = "rgb(%s, %s, %s)">%s</font>', textColor[1], textColor[2], textColor[3], message)
 end
 
@@ -49,7 +51,7 @@ connect(userInputService.InputBegan, function(input, gpe)
     if gpe then
         return
     end
-    if input.KeyCode == config.prefix then
+    if input.KeyCode == keyCode[settings.prefix] then
         barOpen = not barOpen
         local transparencyTween = barOpen and helpers.tweenAllTransparentToObject or helpers.tweenAllTransparent
         transparencyTween(commandBar, 0.5, commandBarClone)
@@ -183,7 +185,7 @@ do
                     setClipboard(id)
                     ui.notify('Copied the GameID of "'..v.Name..'" to your clipboard.')
                 else
-                    ui.notify('Your exploit does not support copying content to your clipboard')
+                    ui.notify('Incompatible exploit', 'Your exploit does not support copying content to your clipboard')
                 end
             end)
         end
@@ -234,4 +236,42 @@ do
             ui.notify('Player Search', 'Please wait until the current search is finished')
         end
     end)
+end
+
+do
+    local server = pages.Server
+    local serverGame = server.Game
+    local serverPlayers = server.Players
+    local serverAge = server.ClientAge
+    local count = #players:GetPlayers()
+    serverPlayers.PlayersFrame.Players.Text = format('%s/%s', colorize(count), colorize(players.MaxPlayers))
+    serverGame.Thumbnail.Image = 'https://www.roblox.com/asset-thumbnail/image?assetId='..game.PlaceId..'&width=768&height=432&format=png'
+    serverGame.Id.Text = game.PlaceId
+    connect(serverGame.Id.MouseButton1Click, function()
+        if setClipboard then
+            setClipboard(id)
+            ui.notify('Copied the current GameID to your clipboard')
+        else
+            ui.notify('Incompatible exploit', 'Your exploit does not support copying content to your clipboard')
+        end
+    end)
+    connect(players.PlayerAdded, function()
+        count = count + 1
+        serverPlayers.PlayersFrame.Players.Text = format('%s/%s', colorize(count), colorize(players.MaxPlayers))
+    end)
+    connect(players.PlayerRemoving, function()
+        count = count - 1
+        serverPlayers.PlayersFrame.Players.Text = format('%s/%s', colorize(count), colorize(players.MaxPlayers))
+    end)
+    wrap(function()
+        local product = marketPlace:GetProductInfo(game.PlaceId)
+        serverGame.Title.Text = product.Name
+        serverGame.By.Text = 'By '..colorize(product.Creator.Name)
+        serverGame.Description.DescriptionFrame.Description.Text = product.Description
+        while tWait(1) do
+            local mins = workSpace.DistributedGameTime / 60
+            local hrs = mins / 60
+            serverAge.ClientAge.ClientAge.Text = format('%s hrs, %s mins', colorize(hrs), colorize(mins))
+        end
+    end)()
 end
