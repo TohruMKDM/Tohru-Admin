@@ -34,7 +34,6 @@ if isfile(import.root..'/settings.json') then
     storage.settings = settings
 else
     writefile(import.root..'/settings.json', jsonEncode(defaultSettings))
-    local settings = {}
     for i, v in pairs(defaultSettings) do
         settings[i] = v
     end
@@ -42,7 +41,6 @@ else
 end
 settings.prefix = Enum.KeyCode[settings.prefix]
 
-local gui = import('gui')
 local ui = import('ui')
 
 if loadFailed then
