@@ -11,8 +11,10 @@ local date = os.date
 local traceback = debug.traceback
 
 local blacklist = {
-    ['/misc/'] = true,
-    ['libs/unzip.lua'] = true
+    ['TohruAdmin/misc/'] = true,
+    ['TohruAdmin/misc/loader.lua'] = true,
+    ['TohruAdmin/misc/script.lua'] = true,
+    ['TohruAdmin/libs/unzip.lua'] = true
 }
 
 local notify = function(title, message, button, button2, callback)
