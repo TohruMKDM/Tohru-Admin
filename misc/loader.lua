@@ -73,14 +73,13 @@ local downloadScript = function()
     local scriptData = game:HttpGet('https://github.com/TohruMKDM/Tohru-Admin/archive/refs/heads/master.zip')
     local unzip = loadstring(unzipData, '@unzip.lua')()
     local stream = unzip.newStream(scriptData)
-    local inflate = unzip.inflate
-    for name, offset in unzip.getFiles(stream) do
+    for name, content in unzip.getFiles(stream, true) do
         name = 'TohruAdmin'..sub(name, select(2, find(name, '%a/')))
         if not blacklist[name] then
             if sub(name, -1) == '/' then
                 makefolder(name)
             elseif sub(name, -4) == '.lua' then
-                writefile(name, inflate(stream, offset))
+                writefile(name, content)
             end
         end
     end
