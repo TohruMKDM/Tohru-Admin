@@ -3,7 +3,7 @@ return {
     chatLogs = false,
     joinLogs = false,
     cmdLogs = false,
-    persistant = false,
+    persist = false,
     staff = {},
     binds = {},
     spawns = {},
