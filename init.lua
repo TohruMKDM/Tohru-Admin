@@ -8,8 +8,8 @@ local compat = import('compat')
 local storage = import('storage')
 local defaultSettings = import('settings')
 
-local char = string.char
 local settings = {}
+local char = string.char
 local loadFailed = false
 
 compat()
