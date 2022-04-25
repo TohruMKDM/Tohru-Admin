@@ -269,9 +269,12 @@ do
         serverGame.By.Text = 'By '..colorize(product.Creator.Name)
         serverGame.Description.DescriptionFrame.Description.Text = product.Description
         while tWait(1) do
+            if not serverAge.Parent then
+                return
+            end
             local mins = workSpace.DistributedGameTime / 60
             local hrs = mins / 60
-            serverAge.ClientAge.ClientAge.Text = format('%s hrs, %s mins', colorize(hrs), colorize(mins))
+            serverAge.ClientAgeFrame.ClientAge.Text = format('%s hrs, %s mins', colorize(hrs), colorize(mins))
         end
     end)()
 end

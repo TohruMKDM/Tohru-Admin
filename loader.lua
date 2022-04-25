@@ -83,6 +83,7 @@ launchScript = function()
             getgenv().import = nil
             launchScript()
         end)
+        return
     end
     if isfile('TohruAdmin/libs/import.lua') then
         local data = readfile('TohruAdmin/libs/import.lua')
