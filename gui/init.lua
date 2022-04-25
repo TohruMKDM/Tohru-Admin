@@ -249,9 +249,10 @@ do
     serverGame.Id.Text = game.PlaceId
     helpers.onClick(serverGame.Id, 'TextColor3')
     local connection = connect(runService.RenderStepped, function()
-        local mins = workSpace.DistributedGameTime / 60
+        local sec = workSpace.DistributedGameTime
+        local mins = sec / 60
         local hrs = mins / 60
-        serverAge.ClientAgeFrame.ClientAge.Text = format('%s hrs, %s mins', colorize(floor(hrs)), colorize(floor(mins)))
+        serverAge.ClientAgeFrame.ClientAge.Text = format('%s hrs, %s mins, %s secs', colorize(floor(hrs)), colorize(floor(mins)), colorize(secs % 60))
     end)
     connect(serverAge.AncestryChanged, function()
         if not serverAge.Parent then
