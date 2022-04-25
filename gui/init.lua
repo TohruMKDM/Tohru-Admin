@@ -168,7 +168,7 @@ do
         infoFrame.Folllowing.FollowingLabel.Text = json.count
     end
     local setGames = function(results)
-        helpers.ClearAllObjects(gamesFrame)
+        helpers.clearObjects(gamesFrame)
         gamesFrame.CanvasSize = fromOffset(0, 0)
         local data = game:HttpGet('https://games.roblox.com/v2/users/'..result.id..'/games?accessFilter=Public&sortOrder=Asc&limit=25')
         local json = jsonDecode(data)
@@ -209,7 +209,7 @@ do
             playersDebounce = true
             local data = game:HttpGet('https://users.roblox.com/v1/users/search?keyword='..searchBox.Text..'&limit=25')
             local json = jsonDecode(data)
-            helpers.ClearAllObjects(playersResults)
+            helpers.clearObjects(playersResults)
             playersResults.CanvasSize = fromOffset(gridLayout.AbsoluteContentSize.X, gridLayout.AbsoluteContentSize.Y)
             if json.data then
                 for _, player in ipairs(json.data) do
