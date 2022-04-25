@@ -120,9 +120,6 @@ launchScript = function()
             notify('Tohru Admin', 'Unable to initialize tohru admin\nError logged at "TohruAdmin/debug.log"', 'Retry?', nil, function()
                 launchScript()
             end)
-        else
-            local package = import('package')
-            notify('Tohru Admin', 'Tohru Admin v'..package.version..' initialized successfully')
         end
     else
         downloadScript()
