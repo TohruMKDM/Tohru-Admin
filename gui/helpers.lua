@@ -342,8 +342,8 @@ local parentGui = function(object)
     if protectGui then
         protectGui(object)
         object.Parent = coreGui
-    elseif gethui then
-        gui.Parent = gethui()
+    elseif getHui then
+        gui.Parent = getHui()
     else
         gui.Parent = coreGui
     end

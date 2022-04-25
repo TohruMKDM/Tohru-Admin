@@ -11,19 +11,19 @@ local random = math.random
 
 local compat = {}
 
-compat.request = syn and syn.request or http and http.request or http_request or fluxus and fluxus.request or request
+compat.ta_request = syn and syn.request or http and http.request or http_request or fluxus and fluxus.request or request
 
 compat.protectGui = not is_sirhurt_closure and syn and syn.protect_gui
 
-compat.gethui = get_hidden_gui or gethui
+compat.getHui = get_hidden_gui or gethui
 
 compat.queueTeleport = syn and syn.queue_on_teleport or queue_on_teleport or fluxus and fluxus.queue_on_teleport
 
-compat.setclipboard = setclipboard or toclipboard or set_clipboard
+compat.setClipboard = setclipboard or toclipboard or set_clipboard
 
-compat.gethidden = gethiddenproperty or get_hidden_property
+compat.getHidden = gethiddenproperty or get_hidden_property
 
-compat.sethidden = sethiddenproperty or set_hidden_property
+compat.setHidden = sethiddenproperty or set_hidden_property
 
 compat.localPlayer = players.LocalPlayer
 
@@ -55,12 +55,11 @@ compat.jsonDecode = function(data)
     return httpService:JSONDecode(data)
 end
 
-local result = setmetatable({}, {__mode = 'k'})
 compat.randomString = function(length)
+    local result = {}
     for i = 1, length do
         result[i] = char(random(32, 126))
     end
-    result[length + 1] = nil
     return concat(result)
 end
 

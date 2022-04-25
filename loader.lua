@@ -40,6 +40,25 @@ if not writefile then
     return
 end
 
+local cleanUp = function()
+    local storage = import('storage')
+    if storage.gui then
+        storage.gui:Destroy()
+        storage.gui = nil
+    end
+    if storage.connections then
+        for _, v in ipairs(storage.connections) do
+            v:Disconnect()
+        end
+        storage.connections = nil
+    end
+    local compat = import('compat')
+    local global = getgenv()
+    for i in pairs(compat) do
+        global[i] = nil
+    end
+end
+
 local downloadScript = function()
     local unzipData = game:HttpGet('https://raw.githubusercontent.com/TohruMKDM/Tohru-Admin/master/libs/unzip.lua')
     local scriptData = game:HttpGet('https://github.com/TohruMKDM/Tohru-Admin/archive/refs/heads/master.zip')
@@ -79,6 +98,7 @@ launchScript = function()
         getgenv().import = import
         local success, fail = pcall(import, 'init')
         if not success then
+            pcall(cleanUp)
             getgenv().import = nil
             log('error', 'Error initializing tohru admin; %s', fail)
             notify('Tohru Admin', 'Unable to initialize tohru admin\nError logged at "TohruAdmin/debug.log"', 'Retry?', function()
