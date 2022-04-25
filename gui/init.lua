@@ -20,7 +20,6 @@ local newUdim2 = UDim2.new
 local fromOffset, fromRGB = UDim2.fromOffset, Color3.fromRGB
 local thumbnail, headShot = Enum.ThumbnailType.AvatarThumbnail,Enum.ThumbnailType.HeadShot
 local size420 = Enum.ThumbnailSize.Size420x420
-local keyCode = Enum.KeyCode
 local commandBar, main = gui.CommandBar, gui.MainDragFrame.Main
 local title, menu, pages = main.Title, main.Menu, main.Pages
 local settings = storage.settings
@@ -30,6 +29,7 @@ local wrap = coroutine.wrap
 local barGoal = {}
 local barOpen = false
 
+local commandBarClone = commandBar:Clone()
 gui.Notification.Visible = false
 commandBar.Visible = false
 main.Visible = false
@@ -50,10 +50,10 @@ connect(userInputService.InputBegan, function(input, gpe)
     if gpe then
         return
     end
-    if input.KeyCode == keyCode[settings.prefix] then
+    if input.KeyCode == settings.prefix then
         barOpen = not barOpen
         local transparencyTween = barOpen and helpers.tweenAllTransparentToObject or helpers.tweenAllTransparent
-        transparencyTween(commandBar, 0.5)
+        transparencyTween(commandBar, 0.5, commandBarClone)
         if barOpen then
             commandBar.Visible = true
             barGoal.Position = #utils.getTools(localPlayer) == 0 and newUdim2(0.5, -100, 1, -45) or newUdim2(0.5, -100, 1, -110)

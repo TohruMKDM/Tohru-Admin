@@ -215,7 +215,7 @@ local smoothScroll = function(object, factor)
 end
 helpers.smoothScroll = smoothScroll
 
-local tweenAllTransparentToObject = function(object, previousObject, time)
+local tweenAllTransparentToObject = function(object, time, previousObject)
     local previousDescendants = previousObject:GetDescendants()
     local textGoal, imageGoal, scrollGoal, goal = {}, {}, {}, {}
     goal.BackgroundTransparency = previousObject.BackgroundTransparency
@@ -266,6 +266,7 @@ end
 helpers.setAllTransparent = setAllTransparent
 
 local tweenAllTransparent = function(object, time, value, exclude)
+    value = tonumber(value) or 1
     local textGoal, imageGoal, scrollGoal, goal = {}, {}, {}, {}
     imageGoal.BackgroundTransparency = value
     scrollGoal.BackgroundTransparency = value
