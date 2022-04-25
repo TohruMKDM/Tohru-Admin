@@ -18,7 +18,6 @@ if isfile(import.root..'/settings.json') then
         for i, v in pairs(defaultSettings) do
             settings[i] = v
         end
-        storage.settings = settings
         loadFailed = true
     else
         for i, v in pairs(defaultSettings) do
@@ -30,6 +29,7 @@ if isfile(import.root..'/settings.json') then
             end
         end
     end
+    storage.settings = settings
 else
     writefile(import.root..'/settings.json', jsonEncode(defaultSettings))
     local settings = {}
