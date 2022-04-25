@@ -41,6 +41,7 @@ else
 end
 settings.prefix = Enum.KeyCode[settings.prefix]
 
+local gui = import('gui')
 local ui = import('ui')
 
 if loadFailed then
@@ -48,5 +49,5 @@ if loadFailed then
 end
 ui.notify('Tohru Admin', 'Press '..char(settings.prefix.Value)..' to open the command bar.', 10)
 if settings.uiOpen then
-    ui.intro(storage.gui.MainDragFrame.Main, true)
+    ui.intro(gui.MainDragFrame.Main, true)
 end

@@ -280,3 +280,5 @@ do
         serverGame.Description.DescriptionFrame.Description.Text = product.Description
     end)()
 end
+
+return gui
