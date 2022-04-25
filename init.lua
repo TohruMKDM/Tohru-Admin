@@ -12,7 +12,7 @@ local loadFailed = false
 compat()
 
 if isfile(import.root..'/settings.json') then
-    local success, save = pcall(jsonDecode, readfile(import.root..'/save.json'))
+    local success, save = pcall(jsonDecode, readfile(import.root..'/settings.json'))
     local settings = {}
     if not success then
         for i, v in pairs(defaultSettings) do

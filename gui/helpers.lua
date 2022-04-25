@@ -19,7 +19,7 @@ local lower, find = string.lower, string.find
 local search = table.find
 local clamp = math.clamp
 local wrap = coroutine.wrap
-local smoothProperties = {'CanvasSize', 'Postion', 'Rotation', 'ScrollingDirection', 'ScrollBarThickness', 'BorderSizePixel', 'ElasticBehavior', 'SizeConstraint', 'ZIndex', 'BorderColor3', 'Size', 'AnchorPoint', 'Visible'}
+local smoothProperties = {'CanvasSize', 'Position', 'Rotation', 'ScrollingDirection', 'ScrollBarThickness', 'BorderSizePixel', 'ElasticBehavior', 'SizeConstraint', 'ZIndex', 'BorderColor3', 'Size', 'AnchorPoint', 'Visible'}
 
 
 local helpers = {}
