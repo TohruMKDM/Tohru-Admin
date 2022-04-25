@@ -90,7 +90,7 @@ do
     local imageGoal, textGoal = {}, {}
     local lastPage
     local tweenPage = function(page, transparency)
-        page = menu[Page.Name]
+        page = menu[page.Name]
         imageGoal.ImageTransparency = transparency
         textGoal.TextTransparency = transparency
         utils.tween(page.Image, 'Sine', 'Out', 0.25, imageGoal)
