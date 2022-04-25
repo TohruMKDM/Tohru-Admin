@@ -12,6 +12,7 @@ storage.gui = gui
 local ui = import('ui')
 
 local marketPlace = game:GetService('MarketplaceService')
+local runService = game:GetService('RunService')
 local players = game:GetService('Players')
 local userInputService = game:GetService('UserInputService')
 local workSpace = game:GetService('Workspace')
@@ -246,6 +247,16 @@ do
     serverPlayers.PlayersFrame.Players.Text = format('%s/%s', colorize(count), colorize(players.MaxPlayers))
     serverGame.Thumbnail.Image = 'https://www.roblox.com/asset-thumbnail/image?assetId='..game.PlaceId..'&width=768&height=432&format=png'
     serverGame.Id.Text = game.PlaceId
+    local connection = connect(runService.RenderStepped, function()
+        local mins = workSpace.DistributedGameTime / 60
+        local hrs = mins / 60
+        serverAge.ClientAgeFrame.ClientAge.Text = format('%s hrs, %s mins', colorize(hrs), colorize(mins))
+    end)
+    connect(serverAge.AncestryChanged, function()
+        if not serverAge.Parent then
+            removeConnection(connection)
+        end
+    end)
     connect(serverGame.Id.MouseButton1Click, function()
         if setClipboard then
             setClipboard(id)
@@ -267,13 +278,5 @@ do
         serverGame.Title.Text = product.Name
         serverGame.By.Text = 'By '..colorize(product.Creator.Name)
         serverGame.Description.DescriptionFrame.Description.Text = product.Description
-        while tWait(1) do
-            if not serverAge.Parent then
-                return
-            end
-            local mins = workSpace.DistributedGameTime / 60
-            local hrs = mins / 60
-            serverAge.ClientAgeFrame.ClientAge.Text = format('%s hrs, %s mins', colorize(hrs), colorize(mins))
-        end
     end)()
 end

@@ -209,8 +209,14 @@ local smoothScroll = function(object, factor)
             end)
         end
     end
-   connect(runService.Stepped, function()
+   local connection = connect(runService.Stepped, function()
         object.CanvasPosition = (scroll.CanvasPosition - object.CanvasPosition) * factor + object.CanvasPosition
+    end)
+    connect(object.AncestryChanged, function()
+        if not object.Parent then
+            scroll:Destroy()
+            removeConnection(connection)
+        end
     end)
 end
 helpers.smoothScroll = smoothScroll
