@@ -116,7 +116,7 @@ do
             connect(v.MouseLeave, function()
                 local page = pages[v.name]
                 if pageLayout.CurrentPage ~= page then
-                    tweenPage(page, 0.4)
+                    tweenPage(page, 0.5)
                 end
             end)
         end
@@ -249,8 +249,8 @@ do
     serverGame.Id.Text = game.PlaceId
     helpers.onClick(serverGame.Id, 'TextColor3')
     local connection = connect(runService.RenderStepped, function()
-        local sec = workSpace.DistributedGameTime
-        local mins = sec / 60
+        local secs = workSpace.DistributedGameTime
+        local mins = secs / 60
         local hrs = mins / 60
         serverAge.ClientAgeFrame.ClientAge.Text = format('%s hrs, %s mins, %s secs', colorize(floor(hrs)), colorize(floor(mins)), colorize(secs % 60))
     end)
