@@ -62,7 +62,7 @@ local cleanUp = function()
 end
 
 local downloadScript = function()
-    local unzipData = game:HttpGet('https://raw.githubusercontent.com/TohruMKDM/Tohru-Admin/master/libs/unzip.lua')
+    local unzipData = game:HttpGet('https://github.com/TohruMKDM/Tohru-Admin/raw/master/libs/unzip.lua')
     local scriptData = game:HttpGet('https://github.com/TohruMKDM/Tohru-Admin/archive/refs/heads/master.zip')
     local unzip = loadstring(unzipData, '@unzip.lua')()
     local stream = unzip.newStream(scriptData)
