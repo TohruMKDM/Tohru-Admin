@@ -167,7 +167,7 @@ do
         local json = jsonDecode(data)
         infoFrame.Folllowing.FollowingLabel.Text = json.count
     end
-    local setGames = function(results)
+    local setGames = function(result)
         helpers.clearObjects(gamesFrame)
         gamesFrame.CanvasSize = fromOffset(0, 0)
         local data = game:HttpGet('https://games.roblox.com/v2/users/'..result.id..'/games?accessFilter=Public&sortOrder=Asc&limit=25')
@@ -191,7 +191,7 @@ do
         end
     end
     local setStatus = function(clone, player)
-        local data = game:GetService('https://api.roblox.com/users/'..player.id..'/onlinestatus/')
+        local data = game:HttpGet('https://api.roblox.com/users/'..player.id..'/onlinestatus/')
         local json = jsonDecode(data)
         clone.Profile.Image = players:GetUserThumbnailAsync(player.id, headShot, size420)
         clone.Status.Text = json.IsOnline and 'Online' or 'Offline'
