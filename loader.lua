@@ -8,6 +8,7 @@
 local starterGui = game:GetService('StarterGui')
 local sub, find, format, upper = string.sub, string.find, string.format, string.upper
 local date = os.date
+local traceback = debug.traceback
 
 local notify = function(title, message, button, callback)
     local config = {
@@ -100,7 +101,7 @@ launchScript = function()
         if not success then
             pcall(cleanUp)
             getgenv().import = nil
-            log('error', 'Error initializing tohru admin; %s', debug.traceback(fail))
+            log('error', 'Error initializing tohru admin; %s', traceback(fail, 4))
             notify('Tohru Admin', 'Unable to initialize tohru admin\nError logged at "TohruAdmin/debug.log"', 'Retry?', function()
                 launchScript()
             end)

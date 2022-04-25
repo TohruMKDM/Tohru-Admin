@@ -12,7 +12,7 @@ storage.gui = gui
 local ui = import('ui')
 
 local marketPlace = game:GetService('MarketplaceService')
-local players = game:GetService('players')
+local players = game:GetService('Players')
 local userInputService = game:GetService('UserInputService')
 local workSpace = game:GetService('Workspace')
 
