@@ -54,7 +54,7 @@ local tweenDestroy = function(object)
 end
 
 local notifyCallback = function(object, time)
-    helpers.tweenAllTransparentToObject(object, notification, 0.5).Completed:Wait()
+    helpers.tweenAllTransparentToObject(object, 0.5, notification).Completed:Wait()
     tWait(time or 5)
     tweenDestroy(object)
 end
