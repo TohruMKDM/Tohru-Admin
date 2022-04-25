@@ -7,6 +7,7 @@
 local helpers = import('gui/helpers')
 local utils = import('utils')
 local storage = import('storage')
+import('gui')
 
 
 local textService = game:GetService('TextService')
