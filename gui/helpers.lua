@@ -5,6 +5,7 @@
 ]]
 
 local tween = import('utils').tween
+local settings = import('storage').settings
 
 local coreGui = game:GetService('CoreGui')
 local userInputService = game:GetService('UserInputService')
@@ -15,7 +16,7 @@ local newColor3, newColorSequence = Color3.new, ColorSequence.new
 local fromHSV = Color3.fromHSV
 local toHSV = Color3.toHSV
 local userInputState, userInputType = Enum.UserInputState, Enum.UserInputType
-local lower, find = string.lower, string.find
+local lower, find, format = string.lower, string.find,string.format
 local search = table.find
 local clamp = math.clamp
 local wrap = coroutine.wrap
@@ -23,6 +24,12 @@ local smoothProperties = {'CanvasSize', 'Position', 'Rotation', 'ScrollingDirect
 
 
 local helpers = {}
+
+local colorize = function(message)
+    local textColor = settings.textColor
+    return format('<font color = "rgb(%s, %s, %s)">%s</font>', textColor[1], textColor[2], textColor[3], message)
+end
+helpers.colorize = colorize
 
 local relativePosition = function(object, x, y)
     local absolutePosition = object.AbsolutePosition

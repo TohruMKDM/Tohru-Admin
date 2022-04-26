@@ -4,16 +4,21 @@
     Author: misrepresenting
 ]]
 
-local helpers = import('gui/helpers')
-local utils = import('utils')
-local storage = import('storage')
+local relativePosition, tweenAllTransparentToObject, tweenAllTransparent, setAllTransparent, onClick do
+    local helpers = import('gui/helpers')
+    relativePosition, tweenAllTransparentToObject, tweenAllTransparent, setAllTransparent, onClick = helpers.relativePosition, helpers.tweenAllTransparentToObject, helpers.tweenAllTransparent, helpers.setAllTransparent, helpers.onClick
+end
+local tween, getRank do
+    local utils = import('utils')
+    tween, getRank = utils.tween, utils.getRank
+end
+local gui = import('storage').gui
 
 local textService = game:GetService('TextService')
 local players = game:GetService('Players')
 
-local gui = storage.gui
-local newUDim2, newVector2 = UDim2.new, Vector2.new
-local newUDim, newInstance = UDim.new, Instance.new
+local newUDim2, newUDim = UDim2.new, UDim.new
+local newVector2, newInstance = Vector2.new, Instance.new
 local fromOffset = UDim2.fromOffset
 local headShot, size420 = Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420
 local notification, notificationBar = gui.Notification, gui.NotificationBar
@@ -48,44 +53,67 @@ end
 
 local tweenDestroy = function(object)
     if object.Parent then
-        helpers.tweenAllTransparent(object, 0.25).Completed:Wait()
+        tweenAllTransparent(object, 0.25).Completed:Wait()
         object:Destroy()
     end
 end
 
 local notifyCallback = function(object, time)
-    helpers.tweenAllTransparentToObject(object, 0.5, notification).Completed:Wait()
+    tweenAllTransparentToObject(object, 0.5, notification).Completed:Wait()
     tWait(time or 5)
     tweenDestroy(object)
 end
 
 local notify = function(title, message, time)
-    local clone = notification:Clone()
     if not message then
         title, message = 'Notification', title
     end
-    clone.Title.Text = title
-    clone.Message.Text = message
-    clone.Size = fromOffset(clone.Size.X.Offset, getSize(clone.Message) + clone.Size.Y.Offset - clone.Message.TextSize)
-    helpers.setAllTransparent(clone)
-    helpers.onClick(clone.Close, 'TextColor3')
-    clone.Visible = true
-    clone.Parent = notificationBar
-    wrap(notifyCallback)(clone, time)
+    local clone = notification:Clone()
+    setAllTransparent(clone)
+    onClick(clone.Close, 'TextColor3')
     connect(clone.Close.MouseButton1Click, function()
         tweenDestroy(clone)
     end)
+    clone.Title.Text = title
+    clone.Message.Text = message
+    clone.Visible = true
+    clone.Size = fromOffset(clone.Size.X.Offset, getSize(clone.Message) + clone.Size.Y.Offset - clone.Message.TextSize)
+    clone.Parent = notificationBar
+    wrap(notifyCallback)(clone, time)
 end
 ui.notify = notify
+
+local contextMenu = function(object, name, callback)
+    local clone
+    connect(object.MouseButton2Click, function()
+        if not clone then
+            clone = toolTip:Clone()
+            onClick(clone, 'BackgroundColor3')
+            connect(clone.MouseButton1Click, function()
+                clone:Destroy()
+                clone = nil
+                callback()
+            end)
+            clone.Text = name
+            clone.Position = relativePosition(object, mouse.X + 10, mouse.Y)
+            clone.Visible = true
+            clone.Parent = object
+        else
+            clone:Destroy()
+            clone = nil
+        end
+    end)
+end
+ui.contextMenu = contextMenu
 
 local introCallback = function(object, frame, corner)
     if object.Visible then
         local goals = introGoals.opened
         frame.BackgroundTransparency = 1
-        utils.tween(frame, 'Sine', 'Out', 0.25, goals.frameTransparency).Completed:Wait()
+        tween(frame, 'Sine', 'Out', 0.25, goals.frameTransparency).Completed:Wait()
         object.Visible = false
-        utils.tween(corner, 'Sine', 'Out', 0.25, introGoals.cornerRadius)
-        utils.tween(frame, 'Sine', 'Out', 0.25, goals.frameSize).Completed:Wait()
+        tween(corner, 'Sine', 'Out', 0.25, introGoals.cornerRadius)
+        tween(frame, 'Sine', 'Out', 0.25, goals.frameSize).Completed:Wait()
         frame:Destroy()
     else
         local goals = introGoals.closed
@@ -93,10 +121,10 @@ local introCallback = function(object, frame, corner)
         frame.Visible = true
         frame.Size = fromOffset(0, 0)
         corner.CornerRadius = newUDim(1, 0)
-        utils.tween(corner, 'Sine', 'Out', 0.25, introGoals.cornerRadius)
-        utils.tween(frame, 'Sine', 'Out', 0.25, goals.frameSize).Completed:Wait()
+        tween(corner, 'Sine', 'Out', 0.25, introGoals.cornerRadius)
+        tween(frame, 'Sine', 'Out', 0.25, goals.frameSize).Completed:Wait()
         object.Visible = true
-        utils.tween(frame, 'Sine', 'Out', 0.25, goals.frameTransparency).Completed:Wait()
+        tween(frame, 'Sine', 'Out', 0.25, goals.frameTransparency).Completed:Wait()
         frame:Destroy()
     end
 end
@@ -122,7 +150,7 @@ ui.intro = intro
 local logMessage = function(username, message, time, target)
     local userId = players:GetUserIdFromNameAsync(username)
     local thumbnail = players:GetUserThumbnailAsync(userId, headShot, size420)
-    local rank = utils.getRank(userId)
+    local rank = getRank(userId)
     local clone = target.Log:Clone()
     local autoScroll = false
     clone.Username.Text = username
@@ -137,7 +165,7 @@ local logMessage = function(username, message, time, target)
     target.Results.CanvasSize = fromOffset(0, target.Results.UIListLayout.AbsoluteContentSize.Y)
     if autoScroll then
         canvasGoal.CanvasPosition = newVector2(0, target.Results.UIListLayout.AbsoluteContentSize.Y)
-        utils.tween(target._smoothInputFrame, 'Quad', 'Out', 0.25, canvasGoal)
+        tween(target._smoothInputFrame, 'Quad', 'Out', 0.25, canvasGoal)
     end
 end
 ui.logMessage = logMessage
@@ -145,7 +173,7 @@ ui.logMessage = logMessage
 local logJoin = function(username, time, joined)
     local userId = players:GetUserIdFromNameAsync(username)
     local thumbnail = players:GetUserThumbnailAsync(id, headShot, size420)
-    local rank = utils.getRank(userId)
+    local rank = getRank(userId)
     local clone = joinLogs.JoinLog:Clone()
     local autoScroll = false
     clone.Status.Text = joined and 'Has joined the server' or 'Has left the server'
@@ -158,7 +186,7 @@ local logJoin = function(username, time, joined)
     joinLogs.Results.CanvasSize = fromOffset(0, joinLogs.Results.UIListLayout.AbsoluteContentSize.Y)
     if autoScroll then
         canvasGoal.CanvasPosition = newVector2(0, joinLogs.Results.UIListLayout.AbsoluteContentSize.Y)
-        utils.tween(target._smoothInputFrame, 'Quad', 'Out', 0.25, canvasGoal)
+        tween(target._smoothInputFrame, 'Quad', 'Out', 0.25, canvasGoal)
     end
 end
 ui.logJoin = logJoin
@@ -166,9 +194,8 @@ ui.logJoin = logJoin
 local unloadPlugin, loadPlugin
 unloadPlugin = function(name)
     local clone = settings.Plugins.Plugin:Clone()
-    clone.Title.Text = name
-    helpers.onClick(clone.LoadPlugin, 'TextColor3')
-    helpers.onClick(clone.ViewCode, 'ImageColor3')
+    onClick(clone.LoadPlugin, 'TextColor3')
+    onClick(clone.ViewCode, 'ImageColor3')
     connect(clone.LoadPlugin.MouseButton1Click, function()
         clone:Destroy()
         loadPlugin(name)
@@ -176,6 +203,7 @@ unloadPlugin = function(name)
     connect(clone.ViewCode.MouseButton1Click, function()
 
     end)
+    clone.Title.Text = name
     clone.Visible = true
     clone.Parent = settings.Plugins.ScrollingFrame
 end
@@ -184,8 +212,8 @@ ui.unloadPlugin = unloadPlugin
 loadPlugin = function(name)
     local clone = settings.LoadedPlugins.Plugin:Clone()
     clone.Title.Text = name
-    helpers.onClick(clone.UnloadPlugin, 'TextColor3')
-    helpers.onClick(clone.ViewCode, 'ImageColor3')
+    onClick(clone.UnloadPlugin, 'TextColor3')
+    onClick(clone.ViewCode, 'ImageColor3')
 end
 ui.loadPlugin = loadPlugin
 
@@ -194,34 +222,20 @@ local newTab = function(name, text)
     local frame = executor.ExecutorFrame
     local codeClone = frame.CodeTab:Clone()
     local tabClone = frame.Tab:Clone()
-    local delete
-    tabClone.Text = name
-    tabClone.Visible = true
-    tabClone.Parent = frame.TabFrame
-    codeClone.CodeInput.Text = text or ''
-    codeClone.Visible = true
-    codeClone.Parent = frame.Tabs
-    helpers.onClick(tabClone, 'BackgroundColor3')
+    onClick(tabClone, 'BackgroundColor3')
     connect(tabClone.MouseButton1Click, function()
         frame.Tabs.UIPageLayout:JumpTo(codeClone)
     end)
-    connect(tabClone.MouseButton2Click, function()
-        if tabClone.BackgroundTransparency < 1 and not delete then
-            delete = toolTip:Clone()
-            delete.Position = helpers.relativePosition(tabClone, mouse.X + 10, mouse.Y + 10)
-            delete.Visible = true
-            delete.Parent = tabClone
-            helpers.onClick(delete, 'BackgroundColor3')
-            connect(delete.MouseButton1Click, function()
-                codeClone:Destroy()
-                tabClone:Destroy()
-                delete:Destroy()
-            end)
-        elseif delete then
-            delete:Destroy()
-            delete = nil
-        end
+    contextMenu(tabClone, function()
+        codeClone:Destroy()
+        tabClone:Destroy()
     end)
+    tabClone.Text = name
+    codeClone.CodeInput.Text = text or ''
+    tabClone.Visible = true
+    codeClone.Visible = true
+    tabClone.Parent = frame.TabFrame
+    codeClone.Parent = frame.Tabs
 end
 ui.newTab = newTab
 

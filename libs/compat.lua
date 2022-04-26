@@ -11,7 +11,7 @@ local random = math.random
 
 local compat = {}
 
-compat.ta_request = syn and syn.request or http and http.request or http_request or fluxus and fluxus.request or request
+compat.ta_Request = syn and syn.request or http and http.request or http_request or fluxus and fluxus.request or request
 
 compat.protectGui = not is_sirhurt_closure and syn and syn.protect_gui
 
@@ -19,7 +19,7 @@ compat.getHui = get_hidden_gui or gethui
 
 compat.queueTeleport = syn and syn.queue_on_teleport or queue_on_teleport or fluxus and fluxus.queue_on_teleport
 
-compat.setClipboard = setclipboard or toclipboard or set_clipboard
+compat.setClipBoard = setclipboard or toclipboard or set_clipboard
 
 compat.getHidden = gethiddenproperty or get_hidden_property
 
