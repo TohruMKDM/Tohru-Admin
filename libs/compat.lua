@@ -19,6 +19,8 @@ compat.getHui = get_hidden_gui or gethui
 
 compat.queueTeleport = syn and syn.queue_on_teleport or queue_on_teleport or fluxus and fluxus.queue_on_teleport
 
+compat.consoleTitle = rconsolename or rconsoletitle
+
 compat.setClipBoard = setclipboard or toclipboard or set_clipboard
 
 compat.getHidden = gethiddenproperty or get_hidden_property

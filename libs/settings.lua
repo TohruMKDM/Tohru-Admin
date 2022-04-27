@@ -6,6 +6,7 @@ return {
     persist = false,
     uiOpen = false,
     debug = false,
+    cli = false,
     staff = {},
     binds = {},
     spawns = {},

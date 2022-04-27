@@ -1,12 +1,14 @@
 --[[
     Name: loader.lua
     Description: Downloads the script if it hasn't been downloaded already and launches it
-
     Author: Tohru
 ]]
 
 local starterGui = game:GetService('StarterGui')
-local sub, find, format, upper = string.sub, string.find, string.format, string.upper
+
+local newInstance = Instance.new
+local sub, upper = string.sub, string.upper
+local find, format = string.find, string.format
 local date = os.date
 local traceback = debug.traceback
 
@@ -17,31 +19,14 @@ local blacklist = {
     ['TohruAdmin/libs/unzip.lua'] = true
 }
 
-local notify = function(title, message, button, button2, callback)
-    local config = {
-        Title = title,
-        Text = message
-    }
-    if button then
-        local bindable = Instance.new('BindableFunction')
+local notify = function(title, message, button1, button2, callback)
+    local config = {Title = title, Text = message, Button1 = button1, Button2 = button2}
+    if callback then
+        local bindable = newInstance('BindableFunction')
         bindable.OnInvoke = callback
         config.Callback = bindable
-        config.Button1 = button
-        config.Button2 = button2
     end
     starterGui:SetCore('SendNotification', config)
-end
-
-local log = function(tag, message, ...)
-    message = format(message, ...)
-    tag = upper(tag)
-    if isfolder('TohruAdmin') then
-        local write = isfile('TohruAdmin/debug.log') and appendfile or writefile
-        write('TohruAdmin/debug.log', format('\n%s | %s | %s', date('%x - %X'), tag, message))
-    else
-        makefolder('TohruAdmin')
-        writefile('TohruAdmin/debug.log', format('\n%s | [%s] | %s', date('%x - %X'), tag, message))
-    end
 end
 
 if not writefile then
@@ -49,22 +34,14 @@ if not writefile then
     return
 end
 
-local cleanUp = function()
-    local storage = import('storage')
-    if storage.gui then
-        storage.gui:Destroy()
-        storage.gui = nil
-    end
-    if storage.connections then
-        for _, v in ipairs(storage.connections) do
-            v:Disconnect()
-        end
-        storage.connections = nil
-    end
-    local compat = import('compat')
-    local global = getgenv()
-    for i in pairs(compat) do
-        global[i] = nil
+local log = function(tag, message, ...)
+    tag, message = upper(tag), format(message, ...)
+    if isfolder('TohruAdmin') then
+        local write = isfile('TohruAdmin/debug.log') and appendfile or writefile
+        write('TohruAdmin/debug.log', format('\n%s | %s | %s', date('%x - %X'), tag, message))
+    else
+        makefolder('TohruAdmin')
+        writefile('TohruAdmin/debug.log', format('\n%s | [%s] | %s', date('%x - %X'), tag, message))
     end
 end
 

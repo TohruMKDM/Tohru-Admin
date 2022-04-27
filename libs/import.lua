@@ -45,7 +45,7 @@ local parse = function(folder, name)
     end
 end
 
-local import = {}
+local import = {cache = cache}
 setmetatable(import, import)
 import.__index = import
 

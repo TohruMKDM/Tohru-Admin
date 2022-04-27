@@ -8,10 +8,11 @@ local relativePosition, tweenAllTransparentToObject, tweenAllTransparent, setAll
     local helpers = import('gui/helpers')
     relativePosition, tweenAllTransparentToObject, tweenAllTransparent, setAllTransparent, onClick = helpers.relativePosition, helpers.tweenAllTransparentToObject, helpers.tweenAllTransparent, helpers.setAllTransparent, helpers.onClick
 end
-local tween, getRank do
+local tween, getRank, getId, getThumbnail do
     local utils = import('utils')
-    tween, getRank = utils.tween, utils.getRank
+    tween, getRank, getId, getThumbnail = utils.tween, utils.getRank, utils.getId, utils.getThumbnail
 end
+local syntaxHighlighter = import('gui/syntaxHighlighter')
 local gui = import('storage').gui
 
 local textService = game:GetService('TextService')
@@ -20,10 +21,10 @@ local players = game:GetService('Players')
 local newUDim2, newUDim = UDim2.new, UDim.new
 local newVector2, newInstance = Vector2.new, Instance.new
 local fromOffset = UDim2.fromOffset
-local headShot, size420 = Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420
 local notification, notificationBar = gui.Notification, gui.NotificationBar
 local uiPages, toolTip = gui.MainDragFrame.Main.Pages, gui.ToolTip
 local executor, joinLogs, settings = uiPages.Executor, uiPages.JoinLogs, uiPages.Settings.ScrollingFrame
+local find = string.find
 local wrap = coroutine.wrap
 local tWait = task.wait
 local introGoals = {
@@ -148,8 +149,8 @@ end
 ui.intro = intro
 
 local logMessage = function(username, message, time, target)
-    local userId = players:GetUserIdFromNameAsync(username)
-    local thumbnail = players:GetUserThumbnailAsync(userId, headShot, size420)
+    local userId = getId(username)
+    local thumbnail = getThumbnail(userId)
     local rank = getRank(userId)
     local clone = target.Log:Clone()
     local autoScroll = false
@@ -171,8 +172,8 @@ end
 ui.logMessage = logMessage
 
 local logJoin = function(username, time, joined)
-    local userId = players:GetUserIdFromNameAsync(username)
-    local thumbnail = players:GetUserThumbnailAsync(id, headShot, size420)
+    local userId = getId(username)
+    local thumbnail = getThumbnail(userId)
     local rank = getRank(userId)
     local clone = joinLogs.JoinLog:Clone()
     local autoScroll = false
@@ -229,8 +230,18 @@ local newTab = function(name, text)
     contextMenu(tabClone, function()
         codeClone:Destroy()
         tabClone:Destroy()
+        local tabs = 0
+        for _, v in ipairs(frame.TabFrame:GetChildren()) do
+            if find(v.Name, '^Tab %d+$') then
+                tabs = tab + 1
+                v.Name = 'Tab '..tabs
+            end
+        end
     end)
+    syntaxHighlighter(codeClone.CodeInput)
     tabClone.Text = name
+    tabClone.Name = name
+    codeClone.Name = name
     codeClone.CodeInput.Text = text or ''
     tabClone.Visible = true
     codeClone.Visible = true
