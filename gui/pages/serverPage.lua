@@ -1,5 +1,5 @@
 --[[
-    Name: gui/pages/server.lua
+    Name: gui/pages/serverPage.lua
     Description: Program the server page
     Author: misrepresenting
 ]]

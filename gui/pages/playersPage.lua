@@ -1,5 +1,5 @@
 --[[
-    Name: gui/pages/players.lua
+    Name: gui/pages/playersPage.lua
     Description: Program the players page
     Author: misrepresenting
 ]]
@@ -132,7 +132,10 @@ connect(playersInfo.Frame.Close.MouseButton1Click, function()
     end
 end)
 
-connect(searchBox.FocusLost, function()
+connect(searchBox.FocusLost, function(enter)
+    if not enter then
+        return
+    end
     if not searchDebounce then
         searchDebounce = true
         local endpoint = format(endpoints.USER_SEARCH, searchBox.Text)

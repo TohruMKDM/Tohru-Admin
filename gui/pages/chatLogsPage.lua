@@ -1,12 +1,12 @@
 --[[
-    Name: gui/pages/chatLogs.lua
+    Name: gui/pages/chatLogsPage.lua
     Description: Program the chat logs page
     Author: misrepresenting
 ]]
 
 local onClick, smoothScroll, singleSearch, checkmark, clearObjects do
     local helpers = import('../helpers')
-    onClick, smoothScroll, singleSearch, checkmark, clearObjects = heleprs.onClick, helpers.smoothScroll, helpers.singleSearch, helpers.checkmark, helpers.clearObjects
+    onClick, smoothScroll, singleSearch, checkmark, clearObjects = helpers.onClick, helpers.smoothScroll, helpers.singleSearch, helpers.checkmark, helpers.clearObjects
 end
 local gui, settings do
     local storage = import('storage')
@@ -62,7 +62,7 @@ connect(searchBar.MessageSearchFrame.Search:GetPropertyChangedSignal('Text'), fu
 end)
 
 connect(clearChatLogs.MouseButton1Click, function()
-    clearChatLogs(chatLogsResults)
+    clearObjects(chatLogsResults)
     chatLogsResults.CanvasSize = fromOffset(0, 0)
 end)
 

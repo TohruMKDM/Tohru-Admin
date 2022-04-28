@@ -1,5 +1,5 @@
 --[[
-    Name: gui/pages/executor.lua
+    Name: gui/pages/executorPage.lua
     Description: Program the executor page
     Author: misrepresenting
 ]]

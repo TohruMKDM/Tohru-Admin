@@ -26,8 +26,7 @@ local smoothProperties = {'CanvasSize', 'Position', 'Rotation', 'ScrollingDirect
 local helpers = {}
 
 local colorize = function(message)
-    local textColor = settings.textColor
-    return format('<font color = "rgb(%s, %s, %s)">%s</font>', textColor[1], textColor[2], textColor[3], message)
+    return format('<font color = "rgb(%s,%s,%s)">%s</font>', unpack(settings.textColor), message)
 end
 helpers.colorize = colorize
 
