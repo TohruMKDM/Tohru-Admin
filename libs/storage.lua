@@ -5,7 +5,8 @@
 ]]
 
 local storage = {
-    commands = {}
+    commands = {},
+    gui = game:GetObjects("rbxassetid://6354865289")[1]
 }
 
 return storage

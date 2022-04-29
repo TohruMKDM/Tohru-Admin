@@ -132,10 +132,7 @@ connect(playersInfo.Frame.Close.MouseButton1Click, function()
     end
 end)
 
-connect(searchBox.FocusLost, function(enter)
-    if not enter then
-        return
-    end
+connect(searchBox.FocusLost, function()
     if not searchDebounce then
         searchDebounce = true
         local endpoint = format(endpoints.USER_SEARCH, searchBox.Text)

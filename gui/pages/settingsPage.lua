@@ -104,11 +104,9 @@ for _, v in ipairs(eventMenu:GetChildren()) do
         connect(clone.ButtonFrame.AddCommand.MouseButton1Click, function()
             local commandClone = settingsEvents.Command:Clone()
             onClick(commandClone.Delete, 'TextColor3')
-            connect(commandClone.CommandName.FocusLost, function(enter)
-                if enter then
-                    print(commandClone.CommandName.Text)
-                    blink(commandClone.CommandName, 'TextColor3', greenColor)
-                end
+            connect(commandClone.CommandName.FocusLost, function()
+                print(commandClone.CommandName.Text)
+                blink(commandClone.CommandName, 'TextColor3', greenColor)
             end)
             commandClone.Visible = true
             clone.Parent = clone

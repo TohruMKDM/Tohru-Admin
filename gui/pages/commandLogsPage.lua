@@ -4,12 +4,6 @@
     Author: misrepresenting
 ]]
 
---[[
-    Name: gui/pages/commandLogsPage.lua
-    Description: Program the chat logs page
-    Author: misrepresenting
-]]
-
 local onClick, smoothScroll, singleSearch, checkmark, clearObjects do
     local helpers = import('../helpers')
     onClick, smoothScroll, singleSearch, checkmark, clearObjects = helpers.onClick, helpers.smoothScroll, helpers.singleSearch, helpers.checkmark, helpers.clearObjects
