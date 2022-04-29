@@ -13,14 +13,14 @@ local tween = import('utils').tween
 local gui = import('storage').gui
 
 local newColor = Color3.new
-local fromRGB = color3.fromRGB
+local fromRGB = Color3.fromRGB
 local barColor, textColor = newColor(1, 1, 1), newColor(1, 1, 1)
 local gsub, format = string.gsub, string.format
 local floor = math.floor
 
 local commandBar = gui.CommandBar
 local main = gui.MainDragFrame.Main
-local settingsPage = main.Pages.Settings.settingsPage
+local settingsPage = main.Pages.Settings.ScrollingFrame
 local settingsBarColor = settingsPage.CommandBarColor
 local settingsTextColor = settingsPage.TextColor
 local settingsEvents = settingsPage.Events
@@ -99,7 +99,7 @@ end
 
 for _, v in ipairs(eventMenu:GetChildren()) do
     if v.ClassName ~= 'UIListLayout' then
-        local clone = settingsEvents.CommandFrame:Clone()
+        local clone = settingsEvents.CommandsFrame:Clone()
         onClick(clone.ButtonFrame.AddCommand, 'BackgroundColor3')
         connect(clone.ButtonFrame.AddCommand.MouseButton1Click, function()
             local commandClone = settingsEvents.Command:Clone()

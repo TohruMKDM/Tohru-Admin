@@ -22,8 +22,8 @@ local format = string.format
 local floor = math.floor
 local wrap = coroutine.wrap
 
-local serverPage = gui.MainDragFrame.Main.Pages.server
-local serverGame = serverPage.serverGame
+local serverPage = gui.MainDragFrame.Main.Pages.Server
+local serverGame = serverPage.Game
 local serverPlayers = serverPage.Players
 local serverAge = serverPage.ClientAge
 

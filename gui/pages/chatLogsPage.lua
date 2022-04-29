@@ -34,7 +34,7 @@ for _, v in ipairs(players:GetPlayers()) do
     end)
 end
 
-smoothScroll(chatLogsPage, 0.14)
+smoothScroll(chatLogsResults, 0.14)
 onClick(clearChatLogs, 'BackgroundColor3')
 
 checkmark(toggleChatLogs, function(bool)

@@ -30,7 +30,7 @@ local wrap = coroutine.wrap
 
 local playersPage = gui.MainDragFrame.Main.Pages.Players
 local playersInfo = playersPage.Info
-local playersUser = playersInfo.User
+local playersUser = playersPage.User
 local playersGame = playersPage.Game
 local playersResults = playersPage.Results
 local searchBox = playersPage.SearchBar.SearchFrame.Search

@@ -26,7 +26,8 @@ local smoothProperties = {'CanvasSize', 'Position', 'Rotation', 'ScrollingDirect
 local helpers = {}
 
 local colorize = function(message)
-    return format('<font color = "rgb(%s,%s,%s)">%s</font>', unpack(settings.textColor), message)
+    local textColor = settings.textColor
+    return format('<font color = "rgb(%s,%s,%s)">%s</font>', textColor[1], textColor[2], textColor[3], message)
 end
 helpers.colorize = colorize
 
@@ -324,10 +325,10 @@ end
 helpers.tweenAllTransparent = tweenAllTransparent
 
 local checkmark = function(object, callback)
-    local button = object.checkmark
+    local button = object.Checkmark
     local checked = button.Text == '✓'
     onClick(button, 'BackgroundColor3')
-    connect(Button.MouseButton1Click, function()
+    connect(button.MouseButton1Click, function()
         checked = not checked
         button.Text = checked and '✓' or ''
         callback(checked)

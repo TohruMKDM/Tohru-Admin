@@ -35,7 +35,7 @@ for _, v in ipairs(players:GetPlayers()) do
     end)
 end
 
-smoothScroll(commandLogsPage, 0.14)
+smoothScroll(commandLogsResults, 0.14)
 onClick(clearCommandLogs, 'BackgroundColor3')
 
 checkmark(toggleCommandLogs, function(bool)
@@ -52,8 +52,8 @@ connect(searchBar.NameSearchFrame.Search:GetPropertyChangedSignal('Text'), funct
     commandLogsResults.CanvasSize = fromOffset(0, commandLogsResults.UIListLayout.AbsoluteContentSize.Y)
 end)
 
-connect(searchBar.MessageSearchFrame.Search:GetPropertyChangedSignal('Text'), function()
-    local query = searchBar.MessageSearchFrame.Search.Text
+connect(searchBar.CommandSearchFrame.Search:GetPropertyChangedSignal('Text'), function()
+    local query = searchBar.CommandSearchFrame.Search.Text
     for _, v in ipairs(commandLogsResults:GetChildren()) do
         if v.ClassName ~= 'UIListLayout' then
             singleSearch(v, v.MessageFrame.Message, query)
