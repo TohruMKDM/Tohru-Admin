@@ -66,7 +66,7 @@ local setFollowers = function(player)
 end
 
 local setFriends = function(player)
-    local endpoint = format(endpoint.FRIENDS, player.id)
+    local endpoint = format(endpoints.FRIENDS, player.id)
     local json = jsonDecode(game:HttpGet(endpoint))
     infoFrame.Friends.FriendsLabel.Text = json.count
 end
@@ -103,7 +103,7 @@ local setStatus = function(object, player)
     local json = jsonDecode(game:HttpGet(endpoint))
     local thumbnail = players:GetUserThumbnailAsync(player.id, headShot, size420)
     object.Profile.Image = thumbnail
-    object.Profile.Text = json.IsOnline and 'Online' or 'Offline'
+    object.Status.Text = json.IsOnline and 'Online' or 'Offline'
 end
 
 smoothScroll(playersResults, 0.14)
