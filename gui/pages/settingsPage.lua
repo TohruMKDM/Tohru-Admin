@@ -67,7 +67,7 @@ connect(settingsTextColor.ApplyColor.MouseButton1Click, function()
             end
         end
     end
-    main.TitleButton.Text = colorize('Tohru')..' Admin'
+    main.Title.TitleButton.Text = colorize('Tohru')..' Admin'
 end)
 
 connect(plugins.SearchBar.SearchFrame.Search:GetPropertyChangedSignal('Text'), function()

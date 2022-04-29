@@ -154,6 +154,7 @@ connect(searchBox.FocusLost, function()
                     intro(playersInfo.Frame)
                 end)
                 wrap(setStatus)(clone, v)
+                clone.UsernameFrame.Username.Text = v.Name
                 clone.Visible = true
                 clone.Parent = playersResults
                 playersResults.CanvasSize = fromOffset(gridLayout.AbsoluteContentSize.X, gridLayout.AbsoluteContentSize.Y)
