@@ -27,6 +27,8 @@ local serverGame = serverPage.Game
 local serverPlayers = serverPage.Players
 local serverAge = serverPage.ClientAge
 
+serverPlayers.PlayersFrame.Players.Text = format('%s/%s', colorize(playerCount), colorize(maxPlayers))
+
 onClick(serverGame.Id, 'TextColor3')
 
 local connection = connect(runService.RenderStepped, function()

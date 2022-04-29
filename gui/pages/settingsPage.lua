@@ -109,7 +109,7 @@ for _, v in ipairs(eventMenu:GetChildren()) do
                 blink(commandClone.CommandName, 'TextColor3', greenColor)
             end)
             commandClone.Visible = true
-            clone.Parent = clone
+            commandClone.Parent = clone
         end)
         clone.Name = v.Name
         clone.Visible = true

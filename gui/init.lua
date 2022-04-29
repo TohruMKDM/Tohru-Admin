@@ -6,7 +6,7 @@
 
 local onClick, parentGui, dragGui, setAllTransparent, tweenAllTransparentToObject, tweenAllTransparent do
     local helpers = import('helpers')
-    onClick, parentGui, dragGui, setAllTransparent, tweenAllTransparentToObject, tweenAllTransparent = helpers.onClick, helpers.parentGui, helpers.dragGui, helpers.setAllTransparent, helpers.tweenAllTransparentToObject, helpers.twenAllTransparent
+    onClick, parentGui, dragGui, setAllTransparent, tweenAllTransparentToObject, tweenAllTransparent = helpers.onClick, helpers.parentGui, helpers.dragGui, helpers.setAllTransparent, helpers.tweenAllTransparentToObject, helpers.tweenAllTransparent
 end
 local settings, gui do
     local storage = import('storage')
@@ -24,7 +24,7 @@ local newUDim2 = UDim2.new
 local defer = task.defer
 local barGoals = {
     close = {Position = newUDim2(0.5, -100, 1, 5)},
-    openTools = {Positon = newUDim2(0.5, -100, 1, -110)},
+    openTools = {Position = newUDim2(0.5, -100, 1, -110)},
     open = {Position = newUDim2(0.5,-100, 1, -45)}
 }
 local textGoal, imageGoal = {}, {}

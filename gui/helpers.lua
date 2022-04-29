@@ -169,7 +169,7 @@ local colorPicker = function(object, callback)
     local update = function(percentage)
         if percentage then
             for i = 1, #keyPoints - 1 do
-                local keyPoint, nextPoint = KeyPoints[i], keyPoints[i + 1]
+                local keyPoint, nextPoint = keyPoints[i], keyPoints[i + 1]
                 if keyPoint.Time <= percentage and nextPoint.Time >= percentage then
                     hueValue = toHSV(keyPoint.Value:Lerp(nextPoint.Value, percentage - keyPoint.Time / nextPoint.Time - keyPoint.Time))
                 end

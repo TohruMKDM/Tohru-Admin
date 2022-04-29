@@ -16,5 +16,7 @@ return function(object)
     connect(object.InputChanged, function(input)
         inputChanged(input, object)
     end)
-    connect(object:GetPropertyChangedSignal('Text'), textChanged)
+    connect(object:GetPropertyChangedSignal('Text'), function()
+        textChanged(object)
+    end)
 end
