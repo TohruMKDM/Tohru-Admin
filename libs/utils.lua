@@ -4,7 +4,7 @@
     Author: Tohru
 ]]
 
-local storage = import('gui')
+local storage = import('storage')
 
 local tweenService = game:GetService('TweenService')
 local players = game:GetService('Players')
