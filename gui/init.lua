@@ -36,7 +36,7 @@ local title, menu, pages = main.Title,main.Menu, main.Pages
 local pageLayout = pages.UIPageLayout
 local barClone = commandBar:Clone()
 
-commandBar.Position = barGoals.close
+commandBar.Position = barGoals.close.Position
 gui.Notification.Visible = false
 commandBar.Visible = false
 main.Visible = false
@@ -62,7 +62,7 @@ if settings.uiOpen then
     intro(main, true)
 end
 
-connec(userInputService.InputBegan, function(input, gpe)
+connect(userInputService.InputBegan, function(input, gpe)
     if gpe then
         return
     end

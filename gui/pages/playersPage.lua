@@ -5,7 +5,7 @@
 ]]
 
 local smoothScroll, onClick, clearObjects, colorize, blink do
-    local helpers = import('../helpers')
+    local helpers = import('gui/helpers')
     smoothScroll, onClick, clearObjects, colorize, blink = helpers.smoothScroll, helpers.onClick, helpers.clearObjects, helpers.colorize, helpers.blink
 end
 local notify, intro do

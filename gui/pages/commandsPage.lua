@@ -5,7 +5,7 @@
 ]]
 
 local smoothScroll, singleSearch do
-    local helpers = import('../helpers')
+    local helpers = import('gui/helpers')
     smoothScroll, singleSearch = helpers.smoothScroll, singleSearch
 end
 local gui = import('storage').gui

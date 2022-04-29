@@ -5,7 +5,7 @@
 ]]
 
 local smoothScroll, colorPicker, onClick, singleSearch, blink do
-    local helpers = import('../helpers')
+    local helpers = import('gui/helpers')
     smoothScroll, colorPicker, onClick, singleSearch, blink = helpers.smoothScroll, helpers.colorPicker, helpers.onClick, helpers.singleSearch, helpers.blink
 end
 local settings = import('settings')

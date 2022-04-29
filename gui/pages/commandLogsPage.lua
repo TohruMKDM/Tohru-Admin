@@ -5,7 +5,7 @@
 ]]
 
 local onClick, smoothScroll, singleSearch, checkmark, clearObjects do
-    local helpers = import('../helpers')
+    local helpers = import('gui/helpers')
     onClick, smoothScroll, singleSearch, checkmark, clearObjects = helpers.onClick, helpers.smoothScroll, helpers.singleSearch, helpers.checkmark, helpers.clearObjects
 end
 local gui, settings do

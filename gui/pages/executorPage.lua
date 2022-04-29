@@ -8,7 +8,7 @@ local notify, newTab do
     local ui = import('ui')
     notify, newTab = ui.notify, ui.newTab
 end
-local onClick = import('../helpers').onClick
+local onClick = import('gui/helpers').onClick
 local syntaxHighlighter = import('../syntaxHighlighter')
 local gui = import('storage').gui
 

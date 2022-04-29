@@ -5,7 +5,7 @@
 ]]
 
 local onClick, colorize do
-    local helpers = import('../helpers')
+    local helpers = import('gui/helpers')
     onClick, colorize = helpers.onClick, helpers.colorize
 end
 local notify= import('ui').notify

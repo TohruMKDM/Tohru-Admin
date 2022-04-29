@@ -94,7 +94,7 @@ launchScript = function()
         if not success then
             pcall(cleanUp)
             getgenv().import = nil
-            log('error', 'Error initializing tohru admin;\n %s', traceback(fail, 4))
+            log('error', 'Error initializing tohru admin;\n %s', traceback(fail, 3))
             notify('Tohru Admin', 'Unable to initialize tohru admin\nError logged at "TohruAdmin/debug.log"', 'Retry?', nil, function()
                 launchScript()
             end)
