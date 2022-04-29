@@ -179,7 +179,7 @@ local colorPicker = function(object, callback)
     end
     slider(hue, 0, 1, function(value)
         update(value)
-        saturation.Slider.UIGradient.Color = newColorSequence(fromhSV(hueValue, 0, 1 - brightnessValue), fromHSV(hueValue, 1, 1))
+        saturation.Slider.UIGradient.Color = newColorSequence(fromHSV(hueValue, 0, 1 - brightnessValue), fromHSV(hueValue, 1, 1))
         brightness.Slider.UIGradient.Color = newColorSequence(fromHSV(hueValue, saturationValue, 1), newColor3(0, 0, 0))
     end)
     slider(saturation, 0, 1, function(value)

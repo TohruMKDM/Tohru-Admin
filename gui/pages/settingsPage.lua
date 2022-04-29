@@ -108,6 +108,9 @@ for _, v in ipairs(eventMenu:GetChildren()) do
                 print(commandClone.CommandName.Text)
                 blink(commandClone.CommandName, 'TextColor3', greenColor)
             end)
+            connect(commandClone.Delete.MouseButton1Click, function()
+                commandClone:Destroy()
+            end)
             commandClone.Visible = true
             commandClone.Parent = clone
         end)
