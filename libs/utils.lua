@@ -12,6 +12,8 @@ local players = game:GetService('Players')
 local newTweenInfo = TweenInfo.new
 local easingStyle, easingDirection = Enum.EasingStyle, Enum.EasingDirection
 local headShot, size420 = Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420
+local r15 = Enum.HumanoidRigType.R15
+local settings = storage.settings
 local defer = task.defer
 local date = os.date
 local format = string.format
@@ -78,6 +80,14 @@ local getId = function(name)
 end
 utils.getId = getId
 
+local getRank = function(id)
+    if id == localPlayer.UserId then
+        return 3
+    end
+    return storage.staff[id] or 0
+end
+utils.getRank = getRank
+
 local getThumbnail = function(id)
     local cache = thumbnails[id]
     if cache then
@@ -98,16 +108,18 @@ utils.getTime = getTime
 
 local getTools = function(player, collectHoppers)
     local tools = {}
-    if player.Character then
-        for _, v in ipairs(player.Character:GetChildren()) do
+    local character = player.Character
+    local backpack = player.Backpack
+    if character then
+        for _, v in ipairs(character:GetChildren()) do
             local class = v.ClassName
             if class == 'Tool' or (collectHoppers and class == 'HopperBin') then
                 tools[#tools + 1] = v
             end
         end
     end
-    if player.Backpack then
-        for _, v in ipairs(player.Backpack:GetChildren()) do
+    if backpack then
+        for _, v in ipairs(backpack:GetChildren()) do
             local class = v.ClassName
             if class == 'Tool' or (collectHoppers and class == 'HopperBin') then
                 tools[#tools + 1] = v
@@ -117,6 +129,32 @@ local getTools = function(player, collectHoppers)
     return tools
 end
 utils.getTools = getTools
+
+local getTool = function(player)
+    local character = player.Character
+    local backpack = player.Backpack
+    return character and character:FindFirstChildOfClass('Tool') or backpack:FindFirstChildOfClass('Tool')
+end
+utils.getTool = getTool
+
+local getRoot = function(player)
+    local character = player.Character
+    if character then
+        local humanoid = character:FindFirstChildOfClass('Humanoid')
+        if humanoid then
+            local rootPart = humanoid.RootPart
+            if rootPart.Name == 'HumanoidRootPart' then
+                local torso
+            end
+        end
+    end
+end
+utils.getRoot = getRoot
+
+local isOwner = function(player)
+end
+utils.isOwner = isOwner
+
 
 
 return utils
