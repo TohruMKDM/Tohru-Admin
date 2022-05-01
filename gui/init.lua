@@ -109,7 +109,7 @@ for _, v in ipairs(menu:GetChildren()) do
         connect(v.MouseButton1Click, function()
             local page = pages[v.Name]
             local currentPage = pageLayout.CurrentPage
-            if menu:FindFirstChild(currentPage) then
+            if menu:FindFirstChild(currentPage.Name) then
                 tweenPage(currentPage, 0.5)
             end
             pageLayout:JumpTo(page)
